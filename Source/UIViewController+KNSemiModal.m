@@ -142,6 +142,8 @@ static const uint kDismissButtonTag = 12;
     // Don't use UITapGestureRecognizer to avoid complex handling
     UIButton * dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton addTarget:self action:@selector(dismissSemiModalView) forControlEvents:UIControlEventTouchUpInside];
+    dismissButton.accessibilityLabel = @"Dismiss Button";
+    dismissButton.accessibilityHint = @"Tap to dismiss chooser";
     dismissButton.backgroundColor = [UIColor clearColor];
     dismissButton.frame = of;
     dismissButton.tag = kDismissButtonTag;
@@ -187,7 +189,8 @@ static const uint kDismissButtonTag = 12;
   UIView * target = [self parentTarget];
   UIView * modal = [target.subviews objectAtIndex:target.subviews.count-1];
   UIView * overlay = [target.subviews objectAtIndex:target.subviews.count-2];
-	NSTimeInterval duration = [[self kn_optionsOrDefaultForKey:KNSemiModalOptionKeys.animationDuration] doubleValue];
+    [self kn_registerTransitionDefaults];  // FIXME: hack to keep defaults from disappearing :(
+    NSTimeInterval duration = [[self kn_optionsOrDefaultForKey:KNSemiModalOptionKeys.animationDuration] doubleValue];
 	[UIView animateWithDuration:duration animations:^{
     modal.frame = CGRectMake(0, target.frame.size.height, modal.frame.size.width, modal.frame.size.height);
   } completion:^(BOOL finished) {
